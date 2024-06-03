@@ -61,6 +61,7 @@ def main():
     df34 = df34[df34['DATE'] != ' DIA']
     df34 = df34.dropna(axis = 1, how = 'all')
     df34 = df34.reset_index(drop = True)
+    df34 = df34.drop(columns=['Unnamed: 32', 'Unnamed: 34', 'POR PROD.', 'Unnamed: 41'])
     df34['DATE'] = pd.to_datetime(df34['DATE'], format= r"%d.%m.%Y")
     df34['DATE'] = df34['DATE'].dt.date
     df34 = df34.sort_values('DATE')
@@ -132,6 +133,7 @@ def main():
     df37 = df37[df37['DATE'] != ' DIA']
     df37 = df37.dropna(axis = 1, how = 'all')
     df37 = df37.reset_index(drop = True)
+    df37 = df37.drop(columns=['Unnamed: 32', 'Unnamed: 34', 'POR PROD.', 'Unnamed: 41'])
     df37['DATE'] = pd.to_datetime(df37['DATE'], format= r"%d.%m.%Y")
     df37['DATE'] = df37['DATE'].dt.date
     df37 = df37.sort_values('DATE')
