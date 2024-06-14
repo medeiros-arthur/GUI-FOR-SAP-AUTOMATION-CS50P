@@ -1,3 +1,12 @@
+# PROJECT TITLE: GUI FOR SAP AUTOMATION - CS50P FINAL PROJECT
+# CREATED BY: ARTHUR MEDEIROS
+# GITHUB PROFILE: https://github.com/medeiros-arthur
+# GITHUB REPOSITOTY: https://github.com/medeiros-arthur/GUI-FOR-SAP-AUTOMATION-CS50P
+# DATE THAT THE VIDEO WAS RECORDED: 03/06/2024
+# DATE THAT THE VIDEO WAS EDITED: 13/06/2024
+
+
+
 import PySimpleGUI as sg
 import win32com.client
 import sys
