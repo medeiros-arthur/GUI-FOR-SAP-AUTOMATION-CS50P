@@ -15,9 +15,13 @@ import time
 from datetime import datetime
 import calendar
 import sapCred # SAP CREDENTIALS
+import os
 
 
 exportPath = sapCred.exportPath # FOLDER TO EXTRACT FILES
+
+
+
 
 mes = datetime.now().strftime("%m")
 ano = datetime.now().strftime("%Y")
@@ -43,8 +47,8 @@ class SapGui():
         self.path = sapCred.sapExePath
         subprocess.Popen(self.path)
         time.sleep(5)
-    
-        
+
+
 
 
     def sapLogin(self):
@@ -52,7 +56,7 @@ class SapGui():
         self.SapGuiAuto = win32com.client.GetObject('SAPGUI')
         if not type(self.SapGuiAuto) == win32com.client.CDispatch:
             return
-        
+
         application = self.SapGuiAuto.GetScriptingEngine
         self.connection = application.OpenConnection("RIOPET [PRD]", True)
         time.sleep(3)
@@ -74,7 +78,7 @@ class SapGui():
             time.sleep(2)
         else:
             sg.popup("Login succesfully")
-            
+
 
     def connect_sap(self):
         SapGuiAuto = win32com.client.GetObject('SAPGUI')
@@ -83,7 +87,7 @@ class SapGui():
         self.session = self.connection.Children(0)
         self.session.findById("wnd[0]").maximize
         time.sleep(2)
-    
+
     def ce34(self):
         self.connect_sap()
 
@@ -97,7 +101,7 @@ class SapGui():
         self.session.findById("wnd[0]/usr/ctxtS_ISDD-HIGH").setFocus()
         self.session.findById("wnd[0]/usr/ctxtS_ISDD-HIGH").caretPosition = 10
         self.session.findById("wnd[0]/tbar[1]/btn[8]").press()
-       
+
         self.session.findById("wnd[0]").sendVKey(0)
         time.sleep(1)
         self.session.findById("wnd[0]/mbar/menu[0]/menu[1]/menu[2]").select()
@@ -110,7 +114,7 @@ class SapGui():
         time.sleep(1)
         self.session.findById("wnd[1]/usr/ctxtDY_PATH").text = exportPath + r'\CE34'
         self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = f"CE34 {values[0]} {values[1]}.csv"
-        
+
         self.session.findById("wnd[1]/tbar[0]/btn[0]").press()
         time.sleep(1)
         self.session.findById("wnd[0]/tbar[0]/btn[12]").press()
@@ -120,7 +124,7 @@ class SapGui():
         self.session.findById("wnd[0]/tbar[0]/btn[12]").press()
         time.sleep(0.2)
         sg.popup("CE34 Production extracted")
-            
+
 
     def ce37(self):
         self.connect_sap()
@@ -135,7 +139,7 @@ class SapGui():
         self.session.findById("wnd[0]/usr/ctxtS_ISDD-HIGH").setFocus()
         self.session.findById("wnd[0]/usr/ctxtS_ISDD-HIGH").caretPosition = 10
         self.session.findById("wnd[0]/tbar[1]/btn[8]").press()
-       
+
         self.session.findById("wnd[0]").sendVKey(0)
         time.sleep(1)
         self.session.findById("wnd[0]/mbar/menu[0]/menu[1]/menu[2]").select()
@@ -148,7 +152,7 @@ class SapGui():
         time.sleep(1)
         self.session.findById("wnd[1]/usr/ctxtDY_PATH").text = exportPath + r'\CE37'
         self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = f"CE37 {values[0]} {values[1]}.csv"
-        
+
         self.session.findById("wnd[1]/tbar[0]/btn[0]").press()
         time.sleep(0.2)
         self.session.findById("wnd[0]/tbar[0]/btn[12]").press()
@@ -158,56 +162,59 @@ class SapGui():
         self.session.findById("wnd[0]/tbar[0]/btn[12]").press()
         time.sleep(0.2)
         sg.popup("CE37 Production extracted")
-       
+
 
 
 
 #! Event loop to process events and get values
-while True:
-    event, values = window.read()
-
-
-    
-    mes_selected = values[0]
-    ano_selected = values[1]
-    dia = calendar.monthrange(int(ano_selected), int(mes_selected))[1]
-    
-    if event == sg.WINDOW_CLOSED:
-        break
-
-    if event == 'Login Sap':
-        SapGui().sapLogin()
-
-
-    if event == 'Export CE34 Production':
-        SapGui().ce34()
-
-
-    if event == 'Export CE37 Production':
-        SapGui().ce37()
+def main():
+    while True:
+        event, values = window.read()
 
 
 
-        
+        mes_selected = values[0]
+        ano_selected = values[1]
+        dia = calendar.monthrange(int(ano_selected), int(mes_selected))[1]
+
+        if event == sg.WINDOW_CLOSED:
+            break
+
+        if event == 'Login Sap':
+            SapGui().sapLogin()
 
 
-
-    if event == 'Launch Dashboard':
-
-        try:
-        # Run the Streamlit command
-            subprocess.run(["streamlit", "run", "streamlit.py"], check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred: {e}")
+        if event == 'Export CE34 Production':
+            SapGui().ce34()
 
 
-        
-
-        
+        if event == 'Export CE37 Production':
+            SapGui().ce37()
 
 
 
 
-# Close the window
-window.close()
-  
+
+
+
+        if event == 'Launch Dashboard':
+
+            try:
+            # Run the Streamlit command
+                subprocess.run(["streamlit", "run", "streamlit.py"], check=True)
+            except subprocess.CalledProcessError as e:
+                print(f"An error occurred: {e}")
+
+
+
+
+
+
+
+
+
+    # Close the window
+    window.close()
+
+if __name__ == "__main__":
+    main()
